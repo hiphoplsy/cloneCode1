@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
-import { Menu } from 'antd';
+import { Menu, Row, Col } from 'antd';
 
 const AppLayout = ({ children }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   
   return (
     <div>
@@ -19,7 +20,22 @@ const AppLayout = ({ children }) => {
           </Menu.Item>
         </Menu.SubMenu>
       </Menu>
-    </div>
+      <Row gutter={8}>
+        <Col xs={24} md={6}>
+
+        </Col>
+        <Col xs={24} md={12}>
+          {children}
+        </Col>
+        <Col xs={24} md={6}>
+          <a href='http://hiphoplsy.tistory.com' target="_blank" rel="noreferer noopener">블로그</a>
+          { isLoggedIn 
+            ? <UserProfile />
+            : <LogInForm />
+          }
+        </Col>
+      </Row>
+    </div>    
   )
 }
 
