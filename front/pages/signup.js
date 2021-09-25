@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Form, Input } from 'antd';
+import Head from 'next/head';
 
 import useInput from '../hooks/useInput';
 import { SIGNUP_REQUEST } from '../reducers/user';
@@ -42,8 +43,12 @@ const signup = () => {
   }, [email, nickname, password, passwordCheck, term]);
 
   return (
-    <div>
-      <Form onFinish={onSubmit}>
+    <>
+      <Head>
+        <title>NodeBird | 회원가입</title>
+      </Head>
+      <AppLayout>
+      <Form onFinish={onSubmit} style={{ padding: 10 }}>
         <div>
           <label htmlFor="email">이메일</label>
           <br />
@@ -86,7 +91,8 @@ const signup = () => {
           {termError && <div style={{ color: 'red' }}>동의해야 가입이 완료됩니다.</div>}
         </div>
       </Form>
-    </div>
+      </AppLayout>
+    </>
   )
 };
 
