@@ -66,10 +66,10 @@ const PostCard = ({ post }) => {
               <li>
                 <Comment 
                   avatar={<Link>
-                    <a><Avatar>{post.Comments.User.nickname[0]}</Avatar></a>
+                    <a><Avatar>{item.User.nickname[0]}</Avatar></a>
                   </Link>}
-                  author={post.Comments.User.nickname}
-                  content={post.Comments.content}
+                  author={item.User.nickname}
+                  content={item.content}
                 />
               </li>
             )}
