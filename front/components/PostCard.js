@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 import { Button, Card, Popover, List, Avatar } from 'antd';
-import { RetweetOutlined, HeartTwoTone, HeartOutlined } from '@ant-design/icons';
+import { RetweetOutlined, HeartTwoTone, HeartOutlined, UnorderedListOutlined } from '@ant-design/icons';
 
 import CommentForm from './CommentForm';
 
