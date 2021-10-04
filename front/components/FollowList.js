@@ -17,7 +17,7 @@ const FollowList = ({ header, data }) => {
       dataSource={data}
       loadMore={<div style={{ textAlign: 'center', margin: '10px 0 '}}><Button>더보기</Button></div>}
       renderItem={(item) => (
-        <List.Item>
+        <List.Item style={{ marginBottom: '20px' }}>
           <Card
             actions={[
               <StopOutlined key="stop" onClick={onCancel(item.id)} />,
