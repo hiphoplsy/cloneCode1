@@ -6,15 +6,21 @@ export const initialState = {
     me: null,
     signData: {},
     loginData: {},
-    loginLoading: false,
+    loginLoading: false, // 로그인 시도중
     loginDone: false,
     loginError: null,
-    signUpLoading: false,
+    signUpLoading: false, // 회원가입 시도중
     singUpDone: false,
     singUpError: null,
-    changeNicknameLoading: false,
+    changeNicknameLoading: false, // 닉네임변경 시도중
     changeNicknameDone: false,
     changeNicknameError: null,
+    followLoading: false, // 팔로우 시도중
+    followDone: false,
+    followError: null,
+    unFollowLoading: false, // 언팔로우 시도중
+    unFollowDone: false,
+    unFollowError: null,
   }
 };
 
@@ -37,6 +43,14 @@ export const SIGNUP_FAILURE = 'SIGNUP_FAILURE';
 export const CHANGE_NICKNAME_REQUEST = 'CHANGE_NICKNAME_REQUEST';
 export const CHANGE_NICKNAME_SUCCESS = 'CHANGE_NICKNAME_SUCCESS';
 export const CHANGE_NICKNAME_FAILURE = 'CHANGE_NICKNAME_FAILURE';
+
+export const FOLLOW_REQUEST = 'FOLLOW_REQUEST';
+export const FOLLOW_SUCCESS = 'FOLLOW_SUCCESS';
+export const FOLLOW_FAILURE = 'FOLLOW_FAILURE';
+
+export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
+export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
+export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
 const reducer = (state=initialState, action) => produce(state, (draft) => {
   switch(action.type) {
@@ -81,6 +95,34 @@ const reducer = (state=initialState, action) => produce(state, (draft) => {
     case CHANGE_NICKNAME_FAILURE:
       draft.changeNicknameLoading = false;
       draft.changeNicknameError = action.error;
+      break;
+    case FOLLOW_REQUEST:
+      draft.followLoading = true;
+      draft.followDone = false;
+      draft.followError = null;
+      break;
+    case FOLLOW_SUCCESS: 
+      draft.followLoading = false;
+      draft.followDone = true;
+      draft.me.Followings.push({ id: action.data });
+      break;
+    case FOLLOW_FAILURE:
+      draft.followLoading = false;
+      draft.followError = action.error;
+      break;
+    case UNFOLLOW_REQUEST:
+      draft.unFollowLoading = true;
+      draft.unFollowDone = false;
+      draft.unFollowError = null;
+      break;
+    case UNFOLLOW_SUCCESS:
+      draft.unFollowLoading = false;
+      draft.unFollowDone = true;
+      draft.me.Followings.filter((v) => v.id !== action.data);
+      break;
+    case UNFOLLOW_FAILURE:
+      draft.unFollowLoading = false;
+      draft.unFollowError = action.error;
       break;
     default:
       break;

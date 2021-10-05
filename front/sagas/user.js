@@ -5,6 +5,8 @@ import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
   SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
   CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
+  FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE,
+  UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
 } from '../reducers/user';
 
 function loginAPI(data) {
@@ -76,10 +78,60 @@ function* watchChangeNickname() {
   yield takeLatest(CHANGE_NICKNAME_REQUEST, changeNickname);
 }
 
+function followAPI(data) {
+  return axios.post(`/user/${data}/follow`);
+}
+
+function* follow(action) {
+  try {
+    const result = yield call(followAPI, action.data);
+    yield put({
+      type: FOLLOW_SUCCESS,
+      data: result.data,
+    })
+  } catch(err) {
+    yield put({
+      type: FOLLOW_FAILURE,
+      data: err.response.data,
+    })
+  }
+}
+
+function* watchFollow() {
+  yield takeLatest(FOLLOW_REQUEST, follow)
+}
+
+function unFollowAPI(data) {
+  return axios.post(`/user/${data}/unfollow`)
+}
+
+function* unFollow(action) {
+  try {
+    const result = yield call(unFollowAPI, action.data);
+    yield put({
+      type: UNFOLLOW_SUCCESS,
+      data: result.data,
+    })
+  } catch(err) {
+    yield put({
+      type: UNFOLLOW_FAILURE,
+      data: err.response.data,
+    })
+  }
+}
+
+function* watchUnfollow() {
+  yield takeLatest(UNFOLLOW_REQUEST, unFollow);
+}
+
+
+
 export default function* userSaga() {
   yield all([
     fork (watchLogin),
     fork (watchSignUp),
     fork (watchChangeNickname),
+    fork (watchFollow),
+    fork (watchUnfollow),
   ])
 } 
