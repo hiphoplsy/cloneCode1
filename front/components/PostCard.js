@@ -7,6 +7,7 @@ import { RetweetOutlined, HeartTwoTone, HeartOutlined, UnorderedListOutlined } f
 
 import CommentForm from './CommentForm';
 import PostCardContent from './PostCardContent';
+import FollowButton from './FollowList';
 
 const PostCard = ({ post }) => {
   const id = useSelector((state) => state.user.me?.id);
@@ -49,6 +50,7 @@ const PostCard = ({ post }) => {
           >
           </Popover>,
         ]}
+        extra={<FollowButton post={post} />}
       >
         <Card.Meta
           avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
