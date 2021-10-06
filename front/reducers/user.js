@@ -9,6 +9,9 @@ export const initialState = {
     loginLoading: false, // 로그인 시도중
     loginDone: false,
     loginError: null,
+    logoutLoading: false, // 로그아웃 시도중
+    logoutDone: false,
+    logoutError: null, 
     signUpLoading: false, // 회원가입 시도중
     singUpDone: false,
     singUpError: null,
@@ -35,6 +38,10 @@ export const dummyUser = {
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+
+export const LOGOUT_REQUEST = 'LOGOUT_REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT_SUCCESS';
+export const LOGOUT_FAILURE = 'LOGOUT_FAILURE';
 
 export const SIGNUP_REQUEST = 'SIGNUP_REQUEST';
 export const SIGNUP_SUCCESS = 'SIGNUP_SUCCESS';
@@ -81,6 +88,20 @@ const reducer = (state=initialState, action) => produce(state, (draft) => {
     case LOGIN_FAILURE:
       draft.loginDone = false;
       draft.loginError = action.error;
+      break;
+    case LOGOUT_REQUEST:
+      draft.logoutLoading = true;
+      draft.logoutDone = false;
+      draft.logoutError = null;
+      break;
+    case LOGOUT_SUCCESS:
+      draft.logoutLoading = false;
+      draft.logoutDone = true;
+      draft.me = null;
+      break;
+    case LOGOUT_FAILURE:
+      draft.logoutLoading = false;
+      draft.logoutError = action.error;
       break;
     case CHANGE_NICKNAME_REQUEST:
       draft.changeNicknameLoading = true;

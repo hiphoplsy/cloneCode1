@@ -7,6 +7,7 @@ import {
   CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
   FOLLOW_REQUEST, FOLLOW_SUCCESS, FOLLOW_FAILURE,
   UNFOLLOW_REQUEST, UNFOLLOW_SUCCESS, UNFOLLOW_FAILURE,
+  LOGOUT_REQUEST, LOGOUT_SUCCESS, LOGOUT_FAILURE,
 } from '../reducers/user';
 
 function loginAPI(data) {
@@ -124,11 +125,34 @@ function* watchUnfollow() {
   yield takeLatest(UNFOLLOW_REQUEST, unFollow);
 }
 
+function logoutAPI() {
+  return axios.delete('/user/logout');
+}
+
+function* logout() {
+  try {
+    yield call(logoutAPI);
+    yield put({
+      type: LOGOUT_SUCCESS,
+    })
+  } catch(err) {
+    yield put({
+      type: LOGOUT_FAILURE,
+      data: err.response.data,
+    })
+  }
+}
+
+function* watchLogout() {
+  yield takeLatest(LOGOUT_REQUEST, logout);
+}
+
 
 
 export default function* userSaga() {
   yield all([
     fork (watchLogin),
+    fork (watchLogout),
     fork (watchSignUp),
     fork (watchChangeNickname),
     fork (watchFollow),
