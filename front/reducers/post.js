@@ -30,6 +30,9 @@ export const initialState = {
   addCommentLoading: false, // 댓글 작성 시도중
   addCommentDone: false,
   addCommentError: null,
+  removePostLoading: false, // 게시글 삭제 시도중
+  removePostDone: false,
+  removePostError: null,
 };
 
 export const dummyPost = {
@@ -61,6 +64,10 @@ export const dummyPost = {
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
 export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+
+export const REMOVE_POST_REQUEST = 'REMOVE_POST_REQUEST';
+export const REMOVE_POST_SUCCESS = 'REMOVE_POST_SUCCESS';
+export const REMOVE_POST_FAILURE = 'REMOVE_POST_FAILURE';
 
 export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
@@ -95,6 +102,20 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case ADD_COMMENT_FAILURE:
       draft.addCommentLoading = false;
       draft.addCommentError = action.error;
+      break;
+    case REMOVE_POST_REQUEST:
+      draft.removePostLoading = true;
+      draft.removePostDone = false;
+      draft.removePostError = null;
+      break;
+    case REMOVE_POST_SUCCESS:
+      draft.removePostLoading = false;
+      draft.removePostDone = true;
+      draft.mainPosts = draft.MainPosts.filter((v) => v.id !== action.data);
+      break;
+    case REMOVE_POST_FAILURE:
+      draft.removePostLoading = false;
+      draft.removePostError = action.error;
       break;
     default:
       break;

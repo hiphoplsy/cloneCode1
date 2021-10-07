@@ -3,9 +3,10 @@ import axios from 'axios';
 
 import {
   ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE,
+  REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE,
   ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE,
 }  from '../reducers/post';
-import { ADD_POST_TO_ME } from '../reducers/user';
+import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
 function addPostAPI(data) {
   return axios.post('/api/post', data);
@@ -57,9 +58,37 @@ function* watchAddComment() {
   yield takeLatest(ADD_COMMENT_REQUEST, addComment);
 }
 
+function removePostAPI(data) {
+  return axios.delete(`/api/post/${data}`, data);
+}
+
+function* removePost(action) {
+  try {
+    const result = yield call(removePostAPI, action.data)
+    yield put({
+      type: REMOVE_POST_SUCCESS,
+      data: result.data,
+    })
+    yield put({
+      type: REMOVE_POST_OF_ME,
+      data: result.data,
+    })
+  } catch(err) {
+    yield put({
+      type: REMOVE_POST_FAILURE,
+      data: err.response.data,
+    })
+  }
+}
+
+function* watchRemovePost() {
+  yield takeLatest(REMOVE_POST_REQUEST, removePost)
+}
+
 export default function* postSaga() {
   yield all([
-    fork (watchAddPost),
+    fork(watchAddPost),
     fork(watchAddComment),
+    fork(watchRemovePost),
   ])
 };
