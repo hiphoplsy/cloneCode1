@@ -151,11 +151,11 @@ function* watchLogout() {
 
 export default function* userSaga() {
   yield all([
-    fork (watchLogin),
-    fork (watchLogout),
-    fork (watchSignUp),
-    fork (watchChangeNickname),
-    fork (watchFollow),
-    fork (watchUnfollow),
+    fork(watchLogin),
+    fork(watchLogout),
+    fork(watchSignUp),
+    fork(watchChangeNickname),
+    fork(watchFollow),
+    fork(watchUnfollow),
   ])
 } 
