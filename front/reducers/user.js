@@ -59,6 +59,8 @@ export const UNFOLLOW_REQUEST = 'UNFOLLOW_REQUEST';
 export const UNFOLLOW_SUCCESS = 'UNFOLLOW_SUCCESS';
 export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 
+export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+
 const reducer = (state=initialState, action) => produce(state, (draft) => {
   switch(action.type) {
     case SIGNUP_REQUEST:
@@ -144,6 +146,9 @@ const reducer = (state=initialState, action) => produce(state, (draft) => {
     case UNFOLLOW_FAILURE:
       draft.unFollowLoading = false;
       draft.unFollowError = action.error;
+      break;
+    case ADD_POST_TO_ME:
+      draft.me.Posts.unshift({ id: action.data });
       break;
     default:
       break;

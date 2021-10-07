@@ -5,6 +5,7 @@ import {
   ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE,
   ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE,
 }  from '../reducers/post';
+import { ADD_POST_TO_ME } from '../reducers/user';
 
 function addPostAPI(data) {
   return axios.post('/api/post', data);
@@ -16,6 +17,10 @@ function* addPost(data) {
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
+    });
+    yield put({
+      type: ADD_POST_TO_ME,
+      data: id,
     })
   } catch(err) {
     yield put({

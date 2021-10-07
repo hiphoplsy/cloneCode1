@@ -24,10 +24,10 @@ export const initialState = {
     },
     content: '댓글입니다.',
   }],
-  addPostLoading: false,
+  addPostLoading: false, // 게시글 작성 시도중
   addPostDone: false,
   addPostError: null,
-  addCommentLoading: false,
+  addCommentLoading: false, // 댓글 작성 시도중
   addCommentDone: false,
   addCommentError: null,
 };
