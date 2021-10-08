@@ -158,3 +158,5 @@ const reducer = (state=initialState, action) => produce(state, (draft) => {
       break;
   }
 }); 
+
+export default reducer;

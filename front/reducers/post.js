@@ -1,4 +1,6 @@
 import produce from 'immer';
+import shortid from 'shortid';
+import faker from 'faker';
 
 export const initialState = {
   mainPosts: [{
@@ -24,6 +26,9 @@ export const initialState = {
     },
     content: '댓글입니다.',
   }],
+  loadPostsLoading: false, // 게시글들 불러오기 시도중
+  loadPostsDone: false,
+  loadPostsError: null,
   addPostLoading: false, // 게시글 작성 시도중
   addPostDone: false,
   addPostError: null,
@@ -33,33 +38,40 @@ export const initialState = {
   removePostLoading: false, // 게시글 삭제 시도중
   removePostDone: false,
   removePostError: null,
+  hasMorePost: false,
 };
 
-export const dummyPost = {
+export const dummyPost = (number) => Array(number).fill().map(() => ( {
   mainPosts: [{
-    id: 1,
+    id: shortid.generate(),
     User: {
-      id: 1,
-      nickname: '제로초',
+      id: shortid.generate(),
+      nickname: faker.name.findName(),
     },
-    content: '와와아',
+    content: faker.lorem.paragraph(),
     Images: [{
-      src: 'https://pixabay.com/images/id-3024154/',
+      src: faker.image.image(),
     }, {
-      src: 'https://pixabay.com/images/id-488714/',
+      src: faker.image.image(),
     }, {
-      src: 'https://pixabay.com/images/id-1284253/',
+      src: faker.image.image(),
     }],
   }],
   Comments: [{
-    id: 1,
+    id: shortid.generate(),
     User: {
-      id: 2,
-      nickname: '제로투',
+      id: shortid.generate(),
+      nickname: faker.name.findName(),
     },
-    content: '댓글입니다.',
+    content: faker.lorem.sentences(),
   }],
-};
+}));
+
+initialState.mainPosts = initialState.mainPosts.concat(dummyPost());
+
+export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
+export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
+export const LOAD_POSTS_FAILURE = 'LOAD_POSTS_FAILURE';
 
 export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
 export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
@@ -75,6 +87,21 @@ export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch(action.type) {
+    case LOAD_POSTS_REQUEST:
+      draft.loadPostsLoading = true;
+      draft.loadPostsDone = false;
+      draft.loadPostsError = null;
+      break;
+    case LOAD_POSTS_SUCCESS:
+      draft.loadPostsLoading = false;
+      draft.loadPostsDone = true;
+      draft.mainPosts = action.data.concat(draft.mainPosts);
+      draft.hasMorePost = draft.mainPosts.length < 50;
+      break;
+    case LOAD_POSTS_FAILURE:
+      draft.loadPostsLoading = false;
+      draft.loadPostsError = action.error;
+      break;
     case ADD_POST_SUCCESS:
       draft.addPostLoading = true;
       draft.addPostDone = false;
@@ -84,6 +111,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.addPostLoading = false;
       draft.addPostDone = true;
       draft.mainPosts.unshift(dummyPost(action.data));
+      break;
     case ADD_POST_FAILURE:
       draft.addPostLoading = false;
       draft.addPostError = action.error;
@@ -121,3 +149,5 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break;
   }
 })
+
+export default reducer;
