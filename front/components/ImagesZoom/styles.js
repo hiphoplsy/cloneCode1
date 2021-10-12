@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from 'styled-component';
+import styled, { createGlobalStyle } from 'styled-components';
 import { CloseOutlined } from '@ant-design/icons';
 
 export const Overlay = styled.div`
@@ -67,6 +67,6 @@ export const Indicator = styled.div`
 
 export const Global = createGlobalStyle`
   .slick-slide {
-    dispaly: inline-block;
+    display: inline-block;
   }
 `;

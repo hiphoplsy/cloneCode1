@@ -28,11 +28,11 @@ const FollowButton = ({ post }) => {
     <Button type="primary" loading={followLoading || unFollowLoading} onClick={onClickButton}>
       { isFollowing ? '언팔로우' : '팔로우'}
     </Button>
-  )
+  );
 };
 
 FollowButton.propTypes = {
   post: PropTypes.object.isRequired,
-}
+};
 
 export default FollowButton;

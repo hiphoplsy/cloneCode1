@@ -5,8 +5,6 @@ import { StopOutlined } from '@ant-design/icons';
 
 const FollowList = ({ header, data }) => {
 
-  const followersList = [{nickname: zero}, {nickname: zero1} , {nickname: zero2}]
-
   return (
     <List
       style={{ marginBottom: '20px' }}
@@ -15,7 +13,7 @@ const FollowList = ({ header, data }) => {
       bordered
       header={<div>{header}</div>}
       dataSource={data}
-      loadMore={<div style={{ textAlign: 'center', margin: '10px 0 '}}><Button>더보기</Button></div>}
+      loadMore={<div style={{ textAlign: 'center', margin: '10px 0' }}><Button>더보기</Button></div>}
       renderItem={(item) => (
         <List.Item style={{ marginBottom: '20px' }}>
           <Card
@@ -23,12 +21,12 @@ const FollowList = ({ header, data }) => {
               <StopOutlined key="stop" onClick={onCancel(item.id)} />,
             ]}
           >
-            <Card.Meta description={data.nickname} />  
+            <Card.Meta description={data.nickname} />
           </Card>
         </List.Item>
-        )}
+      )}
     />
-  )
+  );
 };
 
 FollowList.propTypes = {

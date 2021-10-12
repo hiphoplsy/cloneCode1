@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Slick from 'react-slick';
 
-import { Overlay, Global, Header, SlickWrapper, ImgWrapper, Indicator } from './styles';
+import { Overlay, Global, Header, SlickWrapper, ImgWrapper, Indicator, CloseBtn } from './styles';
 
 const ImagesZoom = ({ images, onClose }) => {
-
   const [currentSlide, setCurrentSlide] = useState(0);
 
   return (
@@ -15,33 +14,33 @@ const ImagesZoom = ({ images, onClose }) => {
         <h1>상세 이미지</h1>
         <CloseBtn onClick={onClose}>X</CloseBtn>
       </Header>
-    <SlickWrapper>
-      <div>
-        <Slick
-          initialSlide={0}
-          afterChange={(slide) => setCurrenSlide(slide)}
-          infinite
-          slidesToShow={1}
-          slidesToScroll={1}
-        >
-          {images.map((v) => (
-            <ImgWrapper key={v.src}>
-              <img src={`${v.src}`} alt={`${v.src}`} />
-            </ImgWrapper>
-          ))}
-        </Slick>
-        <Indicator>
-          <div>
-            {currentSlide + 1}
-            {' '}
-            / 
-            {images.length}
-          </div>
-        </Indicator>
-      </div>
-    </SlickWrapper>
-  </Overlay>
-  )
+      <SlickWrapper>
+        <div>
+          <Slick
+            initialSlide={0}
+            afterChange={(slide) => setCurrentSlide(slide)}
+            infinite
+            slidesToShow={1}
+            slidesToScroll={1}
+          >
+            {images.map((v) => (
+              <ImgWrapper key={v.src}>
+                <img src={`${v.src}`} alt={`${v.src}`} />
+              </ImgWrapper>
+            ))}
+          </Slick>
+          <Indicator>
+            <div>
+              {currentSlide + 1}
+              {' '}
+              /
+              {images.length}
+            </div>
+          </Indicator>
+        </div>
+      </SlickWrapper>
+    </Overlay>
+  );
 };
 
 ImagesZoom.propTypes = {

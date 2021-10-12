@@ -1,12 +1,13 @@
 import { all, fork, call, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
+import shortId from 'shortid';
 
 import {
   ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_POST_FAILURE,
   LOAD_POSTS_REQUEST, LOAD_POSTS_SUCCESS, LOAD_POSTS_FAILURE,
   REMOVE_POST_REQUEST, REMOVE_POST_SUCCESS, REMOVE_POST_FAILURE,
   ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, ADD_COMMENT_FAILURE,
-}  from '../reducers/post';
+} from '../reducers/post';
 import { ADD_POST_TO_ME, REMOVE_POST_OF_ME } from '../reducers/user';
 
 function addPostAPI(data) {
@@ -16,6 +17,7 @@ function addPostAPI(data) {
 function* addPost(action) {
   try {
     const result = yield call(addPostAPI, action.data);
+    const id = shortId.generate();
     yield put({
       type: ADD_POST_SUCCESS,
       data: result.data,
@@ -23,12 +25,12 @@ function* addPost(action) {
     yield put({
       type: ADD_POST_TO_ME,
       data: id,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: ADD_POST_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
@@ -42,12 +44,12 @@ function addCommentAPI(data) {
 
 function* addComment(action) {
   try {
-    yield result = call(addCommentAPI, action.data);
+    const result = call(addCommentAPI, action.data);
     yield put({
       type: ADD_COMMENT_SUCCESS,
       data: result.data,
     });
-  } catch(err) {
+  } catch (err) {
     yield put({
       type: ADD_COMMENT_FAILURE,
       data: err.response.data,
@@ -65,25 +67,25 @@ function removePostAPI(data) {
 
 function* removePost(action) {
   try {
-    const result = yield call(removePostAPI, action.data)
+    const result = yield call(removePostAPI, action.data);
     yield put({
       type: REMOVE_POST_SUCCESS,
       data: result.data,
-    })
+    });
     yield put({
       type: REMOVE_POST_OF_ME,
       data: result.data,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: REMOVE_POST_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
 function* watchRemovePost() {
-  yield takeLatest(REMOVE_POST_REQUEST, removePost)
+  yield takeLatest(REMOVE_POST_REQUEST, removePost);
 }
 
 function loadPostsAPI(data) {
@@ -96,12 +98,12 @@ function* loadPosts(action) {
     yield put({
       type: LOAD_POSTS_SUCCESS,
       data: result.data,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: LOAD_POSTS_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
@@ -114,5 +116,5 @@ export default function* postSaga() {
     fork(watchAddPost),
     fork(watchAddComment),
     fork(watchRemovePost),
-  ])
-};
+  ]);
+}

@@ -11,7 +11,7 @@ export const initialState = {
     loginError: null,
     logoutLoading: false, // 로그아웃 시도중
     logoutDone: false,
-    logoutError: null, 
+    logoutError: null,
     signUpLoading: false, // 회원가입 시도중
     singUpDone: false,
     singUpError: null,
@@ -24,7 +24,7 @@ export const initialState = {
     unFollowLoading: false, // 언팔로우 시도중
     unFollowDone: false,
     unFollowError: null,
-  }
+  },
 };
 
 export const dummyUser = {
@@ -33,7 +33,7 @@ export const dummyUser = {
   Posts: [],
   Followings: [],
   Followers: [],
-}
+};
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -62,8 +62,8 @@ export const UNFOLLOW_FAILURE = 'UNFOLLOW_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
-const reducer = (state=initialState, action) => produce(state, (draft) => {
-  switch(action.type) {
+const reducer = (state = initialState, action) => produce(state, (draft) => {
+  switch (action.type) {
     case SIGNUP_REQUEST:
       draft.signUpLoading = true;
       draft.signUpDone = false;
@@ -125,7 +125,7 @@ const reducer = (state=initialState, action) => produce(state, (draft) => {
       draft.followDone = false;
       draft.followError = null;
       break;
-    case FOLLOW_SUCCESS: 
+    case FOLLOW_SUCCESS:
       draft.followLoading = false;
       draft.followDone = true;
       draft.me.Followings.push({ id: action.data });
@@ -151,12 +151,12 @@ const reducer = (state=initialState, action) => produce(state, (draft) => {
     case ADD_POST_TO_ME:
       draft.me.Posts.unshift({ id: action.data });
       break;
-    case REOVE_POST_OF_ME:
+    case REMOVE_POST_OF_ME:
       draft.me.Posts = draft.me.Posts.filter((v) => v.id !== action.data);
       break;
     default:
       break;
   }
-}); 
+});
 
 export default reducer;

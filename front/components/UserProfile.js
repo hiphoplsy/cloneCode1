@@ -5,14 +5,14 @@ import { Avatar, Card, Button } from 'antd';
 import { LOGOUT_REQUEST } from '../reducers/user';
 
 const UserProfile = () => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { me, logoutLoading } = useSelector((state) => state.user);
 
   const onLogout = useCallback(() => {
     dispatch({
       type: LOGOUT_REQUEST,
-    })
-  }, []); 
+    });
+  }, []);
 
   return (
     <Card
@@ -34,13 +34,13 @@ const UserProfile = () => {
         </div>,
       ]}
     >
-      <Card.Meta 
+      <Card.Meta
         avatar={<Avatar>{me.nickname[0]}</Avatar>}
         title={me.nickname}
       />
       <Button loading={logoutLoading} onClick={onLogout}>로그아웃</Button>
     </Card>
-  )
+  );
 };
 
 export default UserProfile;

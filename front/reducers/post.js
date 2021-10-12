@@ -1,6 +1,6 @@
 import produce from 'immer';
-import shortid from 'shortid';
 import faker from 'faker';
+import shortid from 'shortid';
 
 export const initialState = {
   mainPosts: [{
@@ -41,7 +41,7 @@ export const initialState = {
   hasMorePost: false,
 };
 
-export const dummyPost = (number) => Array(number).fill().map(() => ( {
+export const dummyPost = (number) => Array(number).fill().map(() => ({
   mainPosts: [{
     id: shortid.generate(),
     User: {
@@ -86,7 +86,7 @@ export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
-  switch(action.type) {
+  switch (action.type) {
     case LOAD_POSTS_REQUEST:
       draft.loadPostsLoading = true;
       draft.loadPostsDone = false;
@@ -102,7 +102,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.loadPostsLoading = false;
       draft.loadPostsError = action.error;
       break;
-    case ADD_POST_SUCCESS:
+    case ADD_POST_REQUEST:
       draft.addPostLoading = true;
       draft.addPostDone = false;
       draft.addPostError = null;
@@ -122,10 +122,10 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.addCommentError = null;
       break;
     case ADD_COMMENT_SUCCESS:
-      draft.addCommentLoading = false;
-      draft.addCommentDone = true;
       const post = draft.mainPosts.find((v) => v.id === action.data.postId);
       post.Comments.unshift(action.data);
+      draft.addCommentLoading = false;
+      draft.addCommentDone = true;
       break;
     case ADD_COMMENT_FAILURE:
       draft.addCommentLoading = false;
@@ -139,7 +139,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case REMOVE_POST_SUCCESS:
       draft.removePostLoading = false;
       draft.removePostDone = true;
-      draft.mainPosts = draft.MainPosts.filter((v) => v.id !== action.data);
+      draft.mainPosts = draft.mainPosts.filter((v) => v.id !== action.data);
       break;
     case REMOVE_POST_FAILURE:
       draft.removePostLoading = false;
@@ -148,6 +148,6 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     default:
       break;
   }
-})
+});
 
 export default reducer;

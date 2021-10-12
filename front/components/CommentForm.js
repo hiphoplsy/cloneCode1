@@ -21,9 +21,9 @@ const CommentForm = ({ post }) => {
     setCommentText('');
   }, [commentText]);
 
-  return(
+  return (
     <Form onFinish={onSubmitComment}>
-      <Form.Item style={{ position: 'relative', margin: 0  }}>
+      <Form.Item style={{ position: 'relative', margin: 0 }}>
         <Input.TextArea
           bordered
           row={4}
@@ -31,19 +31,20 @@ const CommentForm = ({ post }) => {
           value={commentText}
           onChange={onChangeCommentText}
         />
-        <Button 
-          style={{ position: 'absolute', right: 0, bottom: -40 }} 
-          type="primary" 
+        <Button
+          style={{ position: 'absolute', right: 0, bottom: -40 }}
+          type="primary"
           loading={addCommentLoading}
           htmlType="submit"
-        >댓글삐약</Button>
+        >댓글삐약
+        </Button>
       </Form.Item>
     </Form>
-  )
+  );
 };
 
 CommentForm.propTypes = {
   post: PropTypes.array.isRequired,
-}
+};
 
 export default CommentForm;

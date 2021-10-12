@@ -1,5 +1,5 @@
 import React, { useCallback, useRef } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, Input, Button } from 'antd';
 
 import useInput from '../hooks/useInput';
@@ -8,6 +8,7 @@ import { ADD_POST_REQUEST } from '../reducers/post';
 const PostForm = () => {
   const dispatch = useDispatch();
   const [text, onChangeText, setText] = useInput('');
+  const { imagePaths } = useSelector((state) => state.post);
 
   const imageInput = useRef();
   const onClickImageUpload = useCallback(() => {
@@ -27,7 +28,7 @@ const PostForm = () => {
   return (
     <>
       <Form style={{ margin: '10px 0 20px' }} encType="multiple/form-data" onFinish={onSubmit}>
-        <Input.TextArea 
+        <Input.TextArea
           value={text}
           onChange={onChangeText}
           maxLength={280}
@@ -50,7 +51,7 @@ const PostForm = () => {
         </div>
       </Form>
     </>
-  )
+  );
 };
 
 export default PostForm;

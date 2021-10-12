@@ -1,7 +1,7 @@
 import { all, fork, call, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
-import { 
+import {
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
   SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
   CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
@@ -12,7 +12,7 @@ import {
 
 function loginAPI(data) {
   return axios.post('/user/login', data);
-};
+}
 
 function* login(action) {
   try {
@@ -20,22 +20,22 @@ function* login(action) {
     yield put({
       type: LOGIN_SUCCESS,
       data: result.data,
-    })
+    });
   } catch (err) {
     yield put({
       type: LOGIN_FAILURE,
       data: err.response.data,
     });
   }
-};
+}
 
 function* watchLogin() {
-  return takeLatest(LOGIN_REQUEST, login);
-};
+  yield takeLatest(LOGIN_REQUEST, login);
+}
 
 function signUpAPI(data) {
   return axios.post('/user/signup', data);
-};
+}
 
 function* signUp(action) {
   try {
@@ -43,18 +43,18 @@ function* signUp(action) {
     yield put({
       type: SIGNUP_SUCCESS,
       data: result.data,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: SIGNUP_FAILURE,
       data: err.response.data,
-    })
+    });
   }
-};
+}
 
 function* watchSignUp() {
-  return takeLatest(SIGNUP_REQUEST, signUp);
-};
+  yield takeLatest(SIGNUP_REQUEST, signUp);
+}
 
 function changeNicknameAPI(data) {
   return axios.patch('/user/nickname', { nickname: data });
@@ -67,7 +67,7 @@ function* changeNickname(action) {
       type: CHANGE_NICKNAME_SUCCESS,
       data: result.data,
     });
-  } catch(err) {
+  } catch (err) {
     yield put({
       type: CHANGE_NICKNAME_FAILURE,
       data: err.response.data,
@@ -89,21 +89,21 @@ function* follow(action) {
     yield put({
       type: FOLLOW_SUCCESS,
       data: result.data,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: FOLLOW_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
 function* watchFollow() {
-  yield takeLatest(FOLLOW_REQUEST, follow)
+  yield takeLatest(FOLLOW_REQUEST, follow);
 }
 
 function unFollowAPI(data) {
-  return axios.post(`/user/${data}/unfollow`)
+  return axios.post(`/user/${data}/unfollow`);
 }
 
 function* unFollow(action) {
@@ -112,12 +112,12 @@ function* unFollow(action) {
     yield put({
       type: UNFOLLOW_SUCCESS,
       data: result.data,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: UNFOLLOW_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
@@ -134,20 +134,18 @@ function* logout() {
     yield call(logoutAPI);
     yield put({
       type: LOGOUT_SUCCESS,
-    })
-  } catch(err) {
+    });
+  } catch (err) {
     yield put({
       type: LOGOUT_FAILURE,
       data: err.response.data,
-    })
+    });
   }
 }
 
 function* watchLogout() {
   yield takeLatest(LOGOUT_REQUEST, logout);
 }
-
-
 
 export default function* userSaga() {
   yield all([
@@ -157,5 +155,5 @@ export default function* userSaga() {
     fork(watchChangeNickname),
     fork(watchFollow),
     fork(watchUnfollow),
-  ])
-} 
+  ]);
+}
