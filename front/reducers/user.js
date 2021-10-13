@@ -6,6 +6,9 @@ export const initialState = {
     me: null,
     signData: {},
     loginData: {},
+    loadUserLoading: false, // 유저정보 불러오기 시도중
+    loadUserDone: false,
+    loadUserError: null,
     loginLoading: false, // 로그인 시도중
     loginDone: false,
     loginError: null,
@@ -34,6 +37,10 @@ export const dummyUser = {
   Followings: [],
   Followers: [],
 };
+
+export const LOAD_USER_REQUEST = 'LOAD_USER_REQUEST';
+export const LOAD_USER_SUCCESS = 'LOAD_USER_SUCCESS';
+export const LOAD_USER_FAILURE = 'LOAD_USER_FAILURE';
 
 export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -64,6 +71,20 @@ export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
+    case LOAD_USER_REQUEST:
+      draft.loadUserLoading = true;
+      draft.loadUserDone = false;
+      draft.loadUserError = null;
+      break;
+    case LOAD_USER_SUCCESS:
+      draft.loadUserLoading = false;
+      draft.loadUserDone = true;
+      draft.me = action.data;
+      break;
+    case LOAD_USER_FAILURE:
+      draft.loadUserLoading = false;
+      draft.loadUserError = action.error;
+      break;
     case SIGNUP_REQUEST:
       draft.signUpLoading = true;
       draft.signUpDone = false;
@@ -72,7 +93,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case SIGNUP_SUCCESS:
       draft.signUpLoading = false;
       draft.signUpDone = true;
-      draft.me = dummyUser(action.data);
+      draft.me = action.data;
       break;
     case SIGNUP_FAILURE:
       draft.signUpLoading = false;
@@ -86,7 +107,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case LOGIN_SUCCESS:
       draft.loginLoading = false;
       draft.loginDone = true;
-      draft.me = dummyUser(action.data);
+      draft.me = action.data;
       break;
     case LOGIN_FAILURE:
       draft.loginDone = false;

@@ -2,6 +2,7 @@ import { all, fork, call, put, takeLatest } from 'redux-saga/effects';
 import axios from 'axios';
 
 import {
+  LOAD_USER_REQUEST, LOAD_USER_SUCCESS, LOAD_USER_FAILURE,
   LOGIN_REQUEST, LOGIN_SUCCESS, LOGIN_FAILURE,
   SIGNUP_REQUEST, SIGNUP_SUCCESS, SIGNUP_FAILURE,
   CHANGE_NICKNAME_REQUEST, CHANGE_NICKNAME_SUCCESS, CHANGE_NICKNAME_FAILURE,
@@ -147,8 +148,32 @@ function* watchLogout() {
   yield takeLatest(LOGOUT_REQUEST, logout);
 }
 
+function loadUserAPI() {
+  return axios.get('/user');
+}
+
+function* loadUser(action) {
+  try {
+    const result = yield call(loadUserAPI, action.data);
+    yield put({
+      type: LOAD_USER_SUCCESS,
+      data: result.data,
+    });
+  } catch (err) {
+    yield put({
+      type: LOAD_USER_FAILURE,
+      data: err.response.data,
+    });
+  }
+}
+
+function* watchLoadUser() {
+  yield takeLatest(LOAD_USER_REQUEST, loadUser);
+}
+
 export default function* userSaga() {
   yield all([
+    fork(watchLoadUser),
     fork(watchLogin),
     fork(watchLogout),
     fork(watchSignUp),
