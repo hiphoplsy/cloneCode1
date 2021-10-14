@@ -47,33 +47,31 @@ export const initialState = {
   unlikePostEror: null,
 };
 
-export const dummyPost = (number) => Array(number).fill().map(() => ({
-  mainPosts: [{
-    id: shortid.generate(),
-    User: {
-      id: shortid.generate(),
-      nickname: faker.name.findName(),
-    },
-    content: faker.lorem.paragraph(),
-    Images: [{
-      src: faker.image.image(),
-    }, {
-      src: faker.image.image(),
-    }, {
-      src: faker.image.image(),
-    }],
-  }],
-  Comments: [{
-    id: shortid.generate(),
-    User: {
-      id: shortid.generate(),
-      nickname: faker.name.findName(),
-    },
-    content: faker.lorem.sentences(),
-  }],
-}));
-
-initialState.mainPosts = initialState.mainPosts.concat(dummyPost());
+// export const dummyPost = (number) => Array(number).fill().map(() => ({
+//   mainPosts: [{
+//     id: shortid.generate(),
+//     User: {
+//       id: shortid.generate(),
+//       nickname: faker.name.findName(),
+//     },
+//     content: faker.lorem.paragraph(),
+//     Images: [{
+//       src: faker.image.image(),
+//     }, {
+//       src: faker.image.image(),
+//     }, {
+//       src: faker.image.image(),
+//     }],
+//   }],
+//   Comments: [{
+//     id: shortid.generate(),
+//     User: {
+//       id: shortid.generate(),
+//       nickname: faker.name.findName(),
+//     },
+//     content: faker.lorem.sentences(),
+//   }],
+// }));
 
 export const LOAD_POSTS_REQUEST = 'LOAD_POSTS_REQUEST';
 export const LOAD_POSTS_SUCCESS = 'LOAD_POSTS_SUCCESS';
@@ -124,7 +122,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case ADD_POST_SUCCESS:
       draft.addPostLoading = false;
       draft.addPostDone = true;
-      draft.mainPosts.unshift(dummyPost(action.data));
+      draft.mainPosts.unshift(action.data);
       break;
     case ADD_POST_FAILURE:
       draft.addPostLoading = false;
@@ -165,7 +163,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.likePostError = null;
       break;
     case LIKE_POST_SUCCESS:
-      const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+      const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
       post.Likers.push({ id: action.data.UserId });
       draft.likePostLoading = false;
       draft.likePostDone = true;
@@ -180,7 +178,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       draft.unlikePostEror = null;
       break;
     case UNLIKE_POST_SUCCESS:
-      const post = draft.mainPosts.find((v) => v.id === action.data.postId);
+      const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
       post.Likers = post.Likers.filter((v) => v.id !== action.data.UserId);
       draft.unlikePostLoading = false;
       draft.unlikePostDone = true;
