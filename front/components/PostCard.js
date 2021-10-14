@@ -10,17 +10,26 @@ import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
 import PostImages from './PostImages';
 
-import { REMOVE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
   const id = useSelector((state) => state.user.me?.id);
-
-  const [liked, setLiked] = useState(false);
+  const liked = post.Likers.find((v) => v.id === id);
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
-  const onToggleLike = useCallback(() => {
-    setLiked((prev) => !prev);
+  const onLike = useCallback(() => {
+    dispatch({
+      type: LIKE_POST_REQUEST,
+      data: post.id,
+    });
+  }, []);
+
+  const onUnLike = useCallback(() => {
+    dispatch({
+      type: UNLIKE_POST_REQUEST,
+      data: post.id,
+    });
   }, []);
 
   const onToggleCommentForm = useCallback(() => {
@@ -42,8 +51,8 @@ const PostCard = ({ post }) => {
           <RetweetOutlined key="retweet" />,
           <UnorderedListOutlined key="comment" onClick={onToggleCommentForm} />,
           liked
-            ? <HeartTwoTone key="heart" onClick={onToggleLike} />
-            : <HeartOutlined key="heart" onClick={onToggleLike} />,
+            ? <HeartTwoTone key="heart" onClick={onLike} />
+            : <HeartOutlined key="heart" onClick={onUnLike} />,
           <Popover
             key="more"
             content={[
