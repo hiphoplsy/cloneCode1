@@ -26,6 +26,7 @@ export const initialState = {
     },
     content: '댓글입니다.',
   }],
+  imagePaths: [],
   loadPostsLoading: false, // 게시글들 불러오기 시도중
   loadPostsDone: false,
   loadPostsError: null,
@@ -44,7 +45,10 @@ export const initialState = {
   likePostError: null,
   unlikePostLoading: false, // 게시글 좋아요 취소 시도중
   unlikePostDone: false,
-  unlikePostEror: null,
+  unlikePostError: null,
+  uploadImagesLoading: false, // 이미지 업로드 시도중
+  uploadImagesDone: false,
+  uploadImagesError: null,
 };
 
 // export const dummyPost = (number) => Array(number).fill().map(() => ({
@@ -96,6 +100,12 @@ export const LIKE_POST_FAILURE = 'LIKE_POST_FAILURE';
 export const UNLIKE_POST_REQUEST = 'UNLIKE_POST_REQUEST';
 export const UNLIKE_POST_SUCCESS = 'UNLIKE_POST_SUCCESS';
 export const UNLIKE_POST_FAILURE = 'UNLIKE_POST_FAILURE';
+
+export const UPLOAD_IMAGES_REQUEST = 'UPLOAD_IMAGES_REQUEST';
+export const UPLOAD_IMAGES_SUCCESS = 'UPLOAD_IMAGES_SUCCESS';
+export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
+
+export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
 const reducer = (state = initialState, action) => produce(state, (draft) => {
   switch (action.type) {
@@ -175,7 +185,7 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
     case UNLIKE_POST_REQUEST:
       draft.unlikePostLoading = true;
       draft.unlikePostDone = false;
-      draft.unlikePostEror = null;
+      draft.unlikePostError = null;
       break;
     case UNLIKE_POST_SUCCESS:
       const post = draft.mainPosts.find((v) => v.id === action.data.PostId);
@@ -185,7 +195,24 @@ const reducer = (state = initialState, action) => produce(state, (draft) => {
       break;
     case UNLIKE_POST_FAILURE:
       draft.unlikePostLoading = false;
-      draft.unlikePostEror = action.error;
+      draft.unlikePostError = action.error;
+      break;
+    case UPLOAD_IMAGES_REQUEST:
+      draft.uploadImagesLoading = true;
+      draft.uploadImagesDone = false;
+      draft.uploadImagesError = null;
+      break;
+    case UPLOAD_IMAGES_SUCCESS:
+      draft.uploadImagesLoading = false;
+      draft.uploadImagesDone = true;
+      draft.imagePaths = action.data;
+      break;
+    case UPLOAD_IMAGES_FAILURE:
+      draft.uploadImagesLoading = false;
+      draft.uploadImagesError = action.error;
+      break;
+    case REMOVE_IMAGE:
+      draft.imagePaths = draft.imagePaths.filter((v, i) => i !== action.data);
       break;
     default:
       break;
