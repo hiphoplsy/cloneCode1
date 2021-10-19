@@ -10,7 +10,7 @@ import PostCardContent from './PostCardContent';
 import FollowButton from './FollowButton';
 import PostImages from './PostImages';
 
-import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
+import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -19,14 +19,22 @@ const PostCard = ({ post }) => {
   const [commentFormOpened, setCommentFormOpened] = useState(false);
 
   const onLike = useCallback(() => {
-    dispatch({
+    if (!id) {
+      // eslint-disable-next-line no-alert
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
       type: LIKE_POST_REQUEST,
       data: post.id,
     });
   }, []);
 
   const onUnLike = useCallback(() => {
-    dispatch({
+    if (!id) {
+      // eslint-disable-next-line no-alert
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
       type: UNLIKE_POST_REQUEST,
       data: post.id,
     });
@@ -37,18 +45,33 @@ const PostCard = ({ post }) => {
   }, []);
 
   const onRemovePost = useCallback(() => {
-    dispatch({
+    if (!id) {
+      // eslint-disable-next-line no-alert
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
       type: REMOVE_POST_REQUEST,
       data: post.id,
     });
   }, []);
+
+  const onRetweet = useCallback(() => {
+    if (!id) {
+      // eslint-disable-next-line no-alert
+      return alert('로그인이 필요합니다.');
+    }
+    return dispatch({
+      type: RETWEET_REQUEST,
+      data: post.id,
+    });
+  }, [id]);
 
   return (
     <div style={{ marginBottom: '20px' }}>
       <Card
         cover={post.Images[0] && <PostImages images={post.Images} />}
         actions={[
-          <RetweetOutlined key="retweet" />,
+          <RetweetOutlined key="retweet" onClick={onRetweet} />,
           <UnorderedListOutlined key="comment" onClick={onToggleCommentForm} />,
           liked
             ? <HeartTwoTone key="heart" onClick={onLike} />
@@ -71,11 +94,27 @@ const PostCard = ({ post }) => {
         ]}
         extra={<FollowButton post={post} />}
       >
-        <Card.Meta
-          avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
-          title={post.User.nickname[0]}
-          description={<PostCardContent postData={post.content} />}
-        />
+        {post.RetweetId && post.Retweet
+          ? (
+            <Card
+              cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.images} />}
+            >
+              <Card.Meta
+                avatar={<Avatar>{post.Retweet.nickname[0]}</Avatar>}
+                title={post.Retweet.User.nickname[0]}
+                description={<PostCardContent postData={post.Retweet.content} />}
+              />
+            </Card>
+          )
+          : (
+            <>
+              <Card.Meta
+                avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
+                title={post.User.nickname[0]}
+                description={<PostCardContent postData={post.content} />}
+              />
+            </>
+          )}
       </Card>
       {commentFormOpened && (
         <>
@@ -111,6 +150,8 @@ PostCard.propTypes = {
     content: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.any),
     Images: PropTypes.arrayOf(PropTypes.any),
+    RetweetId: PropTypes.number,
+    Retweet: PropTypes.objectOf(PropTypes.any),
   }).isRequired,
 };
 
