@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { END } from 'redux-saga';
+import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
 import AppLayout from '../components/AppLayout';
@@ -9,7 +10,6 @@ import wrapper from '../store/configureStore';
 
 import { LOAD_POSTS_REQUEST } from '../reducers/post';
 import { LOAD_USER_REQUEST } from '../reducers/user';
-import axios from 'axios'
 
 const Home = () => {
   const dispatch = useDispatch();
