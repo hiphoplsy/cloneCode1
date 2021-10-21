@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import { Button, Card, Popover, List, Avatar, Comment } from 'antd';
 import { RetweetOutlined, HeartTwoTone, HeartOutlined, UnorderedListOutlined } from '@ant-design/icons';
 
@@ -11,6 +12,8 @@ import FollowButton from './FollowButton';
 import PostImages from './PostImages';
 
 import { LIKE_POST_REQUEST, REMOVE_POST_REQUEST, RETWEET_REQUEST, UNLIKE_POST_REQUEST } from '../reducers/post';
+
+moment.locale('ko');
 
 const PostCard = ({ post }) => {
   const dispatch = useDispatch();
@@ -92,6 +95,7 @@ const PostCard = ({ post }) => {
             ]}
           />,
         ]}
+        title={post.RetweetId ? `${post.User.nickname}님이 리트윗하였습니다.` : null}
         extra={<FollowButton post={post} />}
       >
         {post.RetweetId && post.Retweet
@@ -99,6 +103,7 @@ const PostCard = ({ post }) => {
             <Card
               cover={post.Retweet.Images[0] && <PostImages images={post.Retweet.images} />}
             >
+              <span style={{ float: 'right' }}>{moment(post.createdAt).format('YYYY MM DD')}</span>
               <Card.Meta
                 avatar={<Avatar>{post.Retweet.nickname[0]}</Avatar>}
                 title={post.Retweet.User.nickname[0]}
@@ -148,8 +153,10 @@ PostCard.propTypes = {
     id: PropTypes.number,
     User: PropTypes.object,
     content: PropTypes.string,
+    createdAt: PropTypes.string,
     Comments: PropTypes.arrayOf(PropTypes.any),
     Images: PropTypes.arrayOf(PropTypes.any),
+    Likers: PropTypes.arrayOf(PropTypes.object),
     RetweetId: PropTypes.number,
     Retweet: PropTypes.objectOf(PropTypes.any),
   }).isRequired,
